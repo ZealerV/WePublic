@@ -1,0 +1,5 @@
+__pycache__/
+env/
+.idea/
+WeChat.iml
+db.sqlite3
