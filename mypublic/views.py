@@ -13,7 +13,7 @@ import time
 # ①和微信服务器进行参数交互
 @csrf_exempt
 def check_signature(request):
-    if request.method == "GET":
+    if request.method == "POST":
         print("request: ", request)
         # 接受微信服务器get请求发过来的参数
         signature = request.GET.get('signature', '')
