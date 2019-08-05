@@ -9,7 +9,7 @@ import time
 
 # Create your views here.
 # django默认开启了csrf防护，@csrf_exempt是去掉防护
-# 和微信服务器进行参数交互
+# ①和微信服务器进行参数交互
 @csrf_exempt
 def check_signature(request):
     if request.method == "GET":
@@ -29,16 +29,100 @@ def check_signature(request):
         print("[token, timestamp, nonce]: ", hashlist)
 
         hashstr = ''.join([s for s in hashlist]).encode('utf-8')
-        print('hashstr before sha1', hashstr)
+        print('hashstr before sha1: ', hashstr)
 
         hashstr = hashlib.sha1(hashstr).hexdigest()
-        print('hashstr sha1', hashstr)
+        print('hashstr sha1: ', hashstr)
 
         if hashstr == signature:
             return HttpResponse(echostr)
         else:
             return HttpResponse("false")
     else:
-        return HttpResponse('success')
+        otherContent = autoreply(request)
+        return HttpResponse(otherContent)
 
 
+# ② 微信服务器推送的消息格式是xml格式的
+#   使用ElementTree来解析出不同的xml内容返回不同的回复信息，就实现了基本的自动回复功能
+import xml.etree.ElementTree as ET
+def autoreply(request):
+    try:
+        # 获取用户发给的信息，并用ET解析
+        webData = request.body
+        xmlData = ET.fromstring(webData)
+
+        msg_type = xmlData.find('MsgType').text
+        ToUserName = xmlData.find('ToUserName').text
+        FormUserName = xmlData.find('FromUserName').text
+        CreateTime = xmlData.find('CreateTime').text
+        MsgType = xmlData.find('MsgType').text
+        MsgId = xmlData.find('MsgId').text
+
+        toUser = FormUserName
+        fromUser = ToUserName
+
+        if msg_type == 'text':
+            content = '你好，你已调试成功了，你真帅'
+            replyMsg = TextMsg(toUser, fromUser, content)
+            print("Yeah!!!!")
+            print("replyMsg: ", replyMsg)
+            return replyMsg.send()
+        elif msg_type == 'image':
+            content = '图片已收到，谢谢'
+            replyMsg = TextMsg(toUser, fromUser, content)
+            return replyMsg.send()
+        elif msg_type == 'voice':
+            content = '语音已收到，谢谢'
+            replyMsg = TextMsg(toUser, fromUser, content)
+            return replyMsg.send()
+        elif msg_type == 'video':
+            content = '视频已收到，谢谢'
+            replyMsg = TextMsg(toUser, fromUser, content)
+            return replyMsg.send()
+        elif msg_type == 'shortVideo':
+            content = '小视频已收到，谢谢'
+            replyMsg = TextMsg(toUser, fromUser, content)
+            return replyMsg.send()
+        elif msg_type == 'location':
+            content = '位置已收到，谢谢'
+            replyMsg = TextMsg(toUser, fromUser, content)
+            return replyMsg.send()
+        else:
+            msg_type == 'link'
+            content = '链接已收到，谢谢！'
+            replyMsg = TextMsg(toUser, fromUser, content)
+            return replyMsg.send()
+    except Exception as e:
+        return e
+
+
+class Msg(object):
+    def __init__(self, xmlData):
+        self.ToUserName = xmlData.find('ToUserName').text
+        self.FromUserName = xmlData.find('FormUserName').text
+        self.CreateTime = xmlData.find('CreateTime').text
+        self.MsgType = xmlData.find('MsgType').text
+        self.MsgId = xmlData.find('MsgId').text
+
+
+import time
+class TextMsg(Msg):
+    def __int__(self, toUserName, fromUserName, content):
+        self.__dict = dict()
+        self.__dict['ToUserName'] = toUserName
+        self.__dict['FromUserName'] = fromUserName
+        self.__dict['CreateTime'] = int(time.time())
+        self.__dict['Content'] = content
+
+    def send(self):
+        XmlForm = """
+        <xml>
+        <ToUserName><![CDATA[{ToUserName}]]></ToUserName>
+        <FromUserName><![CDATA[{FromUserName}]]></FromUserName>
+        <CreateTime><![CDATA[{CreateTime}]]></CreateTime>
+        <MsgType><![CDATA[{MsgType}]]></MsgType>
+        <Content><![CDATA[{Content}]]></Content>
+        </xml>
+        """
+        return XmlForm.format(**self.__dict)
