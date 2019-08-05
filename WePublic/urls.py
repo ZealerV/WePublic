@@ -18,6 +18,6 @@ from django.urls import path
 from mypublic import views as mpv
 
 urlpatterns = [
-    path('/wx/', mpv.check_signature),
+    path('wx/', mpv.check_signature),
     path('admin/', admin.site.urls),
 ]
