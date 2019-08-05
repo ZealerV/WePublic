@@ -120,8 +120,8 @@ class TextMsg(Msg):
         <xml>
         <ToUserName><![CDATA[{ToUserName}]]></ToUserName>
         <FromUserName><![CDATA[{FromUserName}]]></FromUserName>
-        <CreateTime><![CDATA[{CreateTime}]]></CreateTime>
-        <MsgType><![CDATA[{MsgType}]]></MsgType>
+        <CreateTime>{CreateTime}</CreateTime>
+        <MsgType><![CDATA[text]]></MsgType>
         <Content><![CDATA[{Content}]]></Content>
         </xml>
         """
