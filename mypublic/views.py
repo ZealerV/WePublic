@@ -99,6 +99,7 @@ def autoreply(request):
 
 class Msg(object):
     def __init__(self, xmlData):
+        print("接受到的数据：", xmlData)
         self.ToUserName = xmlData.find('ToUserName').text
         self.FromUserName = xmlData.find('FormUserName').text
         self.CreateTime = xmlData.find('CreateTime').text
