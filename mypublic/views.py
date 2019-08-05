@@ -12,7 +12,7 @@ import time
 # ①和微信服务器进行参数交互
 @csrf_exempt
 def check_signature(request):
-    if request.method == "POST":
+    if request.method == "GET":
         print("request: ", request)
         # 接受微信服务器get请求发过来的参数
         signature = request.GET.get('signature', '')
@@ -39,8 +39,9 @@ def check_signature(request):
         else:
             return HttpResponse("false")
     else:
-        otherContent = autoreply(request)
-        return HttpResponse(otherContent)
+        if request.method == "POST":
+            otherContent = autoreply(request)
+            return HttpResponse(otherContent)
 
 
 # ② 微信服务器推送的消息格式是xml格式的
