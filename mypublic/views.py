@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 import hashlib
 import xml.etree.ElementTree as ET
+from django.utils.encoding import smart_str
 import time
 
 
@@ -12,7 +13,7 @@ import time
 # ①和微信服务器进行参数交互
 @csrf_exempt
 def check_signature(request):
-    if request.method == "POST":
+    if request.method == "GET":
         print("request: ", request)
         # 接受微信服务器get请求发过来的参数
         signature = request.GET.get('signature', '')
@@ -37,15 +38,16 @@ def check_signature(request):
         if hashstr == signature:
             return HttpResponse(echostr)
         else:
-            return HttpResponse("false")
+            return HttpResponse("weixin index")
     else:
-        otherContent = autoreply(request)
-        return HttpResponse(otherContent)
+        xml_str = smart_str(request.body)
+        request_xml = ET.fromstring(xml_str)
+        response_xml = autoreply(request_xml)
+        return HttpResponse(response_xml)
 
 
 # ② 微信服务器推送的消息格式是xml格式的
 #   使用ElementTree来解析出不同的xml内容返回不同的回复信息，就实现了基本的自动回复功能
-import xml.etree.ElementTree as ET
 def autoreply(request):
     try:
         # 获取用户发给的信息，并用ET解析
@@ -107,7 +109,6 @@ class Msg(object):
         self.MsgId = xmlData.find('MsgId').text
 
 
-import time
 class TextMsg(Msg):
     def __int__(self, toUserName, fromUserName, content):
         self.__dict = dict()
