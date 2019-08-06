@@ -54,7 +54,7 @@ def autoreply(request):
         if isinstance(recMsg, receive.Msg) and recMsg.MsgType == 'text':
             toUser = recMsg.FromUserName
             fromUser = recMsg.ToUserName
-            content = recMsg.Content
+            content = recMsg.Content.decode('utf-8')
             replyMsg = reply.TextMsg(toUser, fromUser, content)
             return replyMsg.send()
         else:
