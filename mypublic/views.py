@@ -51,98 +51,21 @@ def autoreply(request):
         print("Handle POST webData is: ", webData)
 
         recMsg = receive.parse_xml(webData)
-        if isinstance(recMsg, receive.Msg) and recMsg.MsgType == 'text':
+        if isinstance(recMsg, receive.Msg):
             toUser = recMsg.FromUserName
             fromUser = recMsg.ToUserName
-            content = recMsg.Content.decode('utf-8')
-            replyMsg = reply.TextMsg(toUser, fromUser, content)
-            return replyMsg.send()
+            if recMsg.MsgType == 'text':
+                content = recMsg.Content.decode('utf-8')
+                replyMsg = reply.TextMsg(toUser, fromUser, content)
+                return replyMsg.send()
+            if recMsg.MsgType == 'image':
+                mediaId = recMsg.MeidaId
+                replyMsg = reply.TextMsg(toUser, fromUser, mediaId)
+                return replyMsg.send()
         else:
             print("暂不处理")
-            return "success"
+            # return "success"
+            return reply.Msg().send()
     except Exception as e:
         print(e)
 
-# ② 微信服务器推送的消息格式是xml格式的
-#   使用ElementTree来解析出不同的xml内容返回不同的回复信息，就实现了基本的自动回复功能
-# def autoreply(request):
-#     try:
-#         # 获取用户发给的信息，并用ET解析
-#         webData = request.body
-#         print("POST webData is", webData)
-#         xmlData = ET.fromstring(webData)
-#
-#         msg_type = xmlData.find('MsgType').text
-#         ToUserName = xmlData.find('ToUserName').text
-#         FormUserName = xmlData.find('FromUserName').text
-#         CreateTime = xmlData.find('CreateTime').text
-#         MsgType = xmlData.find('MsgType').text
-#         MsgId = xmlData.find('MsgId').text
-#
-#         toUser = FormUserName
-#         fromUser = ToUserName
-#
-#         if msg_type == 'text':
-#             content = '你好，你已调试成功了，你真帅'
-#             replyMsg = TextMsg(toUser, fromUser, content)
-#             print("Yeah!!!!")
-#             print("replyMsg: ", replyMsg)
-#             return replyMsg.send()
-#         elif msg_type == 'image':
-#             content = '图片已收到，谢谢'
-#             replyMsg = TextMsg(toUser, fromUser, content)
-#             return replyMsg.send()
-#         elif msg_type == 'voice':
-#             content = '语音已收到，谢谢'
-#             replyMsg = TextMsg(toUser, fromUser, content)
-#             return replyMsg.send()
-#         elif msg_type == 'video':
-#             content = '视频已收到，谢谢'
-#             replyMsg = TextMsg(toUser, fromUser, content)
-#             return replyMsg.send()
-#         elif msg_type == 'shortVideo':
-#             content = '小视频已收到，谢谢'
-#             replyMsg = TextMsg(toUser, fromUser, content)
-#             return replyMsg.send()
-#         elif msg_type == 'location':
-#             content = '位置已收到，谢谢'
-#             replyMsg = TextMsg(toUser, fromUser, content)
-#             return replyMsg.send()
-#         else:
-#             msg_type == 'link'
-#             content = '链接已收到，谢谢！'
-#             replyMsg = TextMsg(toUser, fromUser, content)
-#             return replyMsg.send()
-#     except Exception as e:
-#         return e
-#
-
-# class Msg(object):
-#     def __init__(self, xmlData):
-#         print("接受到的数据：", xmlData)
-#         self.ToUserName = xmlData.find('ToUserName').text
-#         self.FromUserName = xmlData.find('FormUserName').text
-#         self.CreateTime = xmlData.find('CreateTime').text
-#         self.MsgType = xmlData.find('MsgType').text
-#         self.MsgId = xmlData.find('MsgId').text
-#
-#
-# class TextMsg(Msg):
-#     def __int__(self, toUserName, fromUserName, content):
-#         self.__dict = dict()
-#         self.__dict['ToUserName'] = toUserName
-#         self.__dict['FromUserName'] = fromUserName
-#         self.__dict['CreateTime'] = int(time.time())
-#         self.__dict['Content'] = content
-#
-#     def send(self):
-#         XmlForm = """
-#         <xml>
-#         <ToUserName><![CDATA[{ToUserName}]]></ToUserName>
-#         <FromUserName><![CDATA[{FromUserName}]]></FromUserName>
-#         <CreateTime>{CreateTime}</CreateTime>
-#         <MsgType><![CDATA[text]]></MsgType>
-#         <Content><![CDATA[{Content}]]></Content>
-#         </xml>
-#         """
-#         return XmlForm.format(**self.__dict)
