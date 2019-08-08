@@ -42,8 +42,6 @@ class TextMsg(Msg):
 
 
 class ImageMsg(Msg):
-    # ISSUE: 'ImageMsg' object has no attribute 'MeidaId'
-
     def __init__(self, toUserName, FromUserName, mediaId):
         self.__dict = dict()
         self.__dict['ToUserName'] = toUserName
@@ -52,7 +50,7 @@ class ImageMsg(Msg):
         self.__dict['MediaId'] = mediaId
 
     def send(self):
-        XmlForm =  """
+        XmlForm = """
         <xml>
         <ToUserName><![CDATA[{ToUserName}]]></ToUserName>
         <FromUserName><![CDATA[{FromUserName}]]></FromUserName>

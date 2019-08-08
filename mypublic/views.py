@@ -59,7 +59,9 @@ def autoreply(request):
                 replyMsg = reply.TextMsg(toUser, fromUser, content)
                 return replyMsg.send()
             if recMsg.MsgType == 'image':
-                mediaId = recMsg.MediaId
+                # ISSUE1: 'ImageMsg' object has no attribute 'MeidaId'
+                # ISSUE2: 发送图片返回了：qCs1WNDj5p9-FULnsVoNoAIeKQUfLsamrfuXn-Goo32RwoDT8wkhh3QGNjZT0D5a
+                mediaId = recMsg.MediaId.decode('utf-8')
                 replyMsg = reply.TextMsg(toUser, fromUser, mediaId)
                 return replyMsg.send()
         else:
