@@ -59,7 +59,7 @@ def autoreply(request):
                 replyMsg = reply.TextMsg(toUser, fromUser, content)
                 return replyMsg.send()
             if recMsg.MsgType == 'image':
-                mediaId = recMsg.MeidaId
+                mediaId = recMsg.MediaId
                 replyMsg = reply.TextMsg(toUser, fromUser, mediaId)
                 return replyMsg.send()
         else:
