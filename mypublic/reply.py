@@ -56,9 +56,7 @@ class ImageMsg(Msg):
         <FromUserName><![CDATA[{FromUserName}]]></FromUserName>
         <CreateTime>{CreateTime}</CreateTime>
         <MsgType><![CDATA[image]]></MsgType>
-        <Image>
-        <MediaId><![CDATA[{MediaId}]]></MediaId>
-        </Image>
+        <Image><MediaId><![CDATA[{MediaId}]]></MediaId></Image>
         <xml>
         """
         return XmlForm.format(**self.__dict)
