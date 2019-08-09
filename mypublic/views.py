@@ -73,13 +73,13 @@ def autoreply(request):
             if recMsg.MsgType == 'video':
                 mediaId = recMsg.MediaId
                 # Issues5: 'VideoMsg' object has no attribute 'MediaId' ----- VideoMsg错写成了VoiceMsg
+                # Issues51: 'VideoMsg' object has no attribute 'MediaId' -----
                 replyMsg = reply.VideoMsg(toUser, fromUser, mediaId)
                 return replyMsg.send()
             else:
                 return reply.Msg().send()
         else:
             print("暂不处理")
-            # return "success"
             return reply.Msg().send()
     except Exception as e:
         print(e)

@@ -103,9 +103,9 @@ class VideoMsg(Msg):
         <CreateTime>{CreateTime}</CreateTime>
         <MsgType><![CDATA[video]]></MsgType>
         <Video>
-            <MediaId><![CDATA[{MediaId}]]></MediaId>
-            <title><![CDATA[title]]></title>
-            <Description><![CDATA[description]]></Description>
+        <MediaId><![CDATA[{MediaId}]]></MediaId>
+        <title><![CDATA[title]]></title>
+        <Description><![CDATA[description]]></Description>
         </Video>
         </xml>
         """
