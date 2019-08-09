@@ -72,7 +72,8 @@ def autoreply(request):
                 return replyMsg.send()
             if recMsg.MsgType == 'video':
                 mediaId = recMsg.MediaId
-                replyMsg = reply.VoiceMsg(toUser, fromUser, mediaId)
+                # Issues5: 'VideoMsg' object has no attribute 'MediaId' ----- VideoMsg错写成了VoiceMsg
+                replyMsg = reply.VideoMsg(toUser, fromUser, mediaId)
                 return replyMsg.send()
             else:
                 return reply.Msg().send()
