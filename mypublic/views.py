@@ -62,9 +62,13 @@ def autoreply(request):
                 # Issues1: 'ImageMsg' object has no attribute 'MeidaId'
                 # Issues2: 发送图片返回了：qCs1WNDj5p9-FULnsVoNoAIeKQUfLsamrfuXn-Goo32RwoDT8wkhh3QGNjZT0D5a
                 # Issues3: 'str' object has no attribute 'decode'
-                # Issues4: '该公众号提供的服务出现故障，请稍后再试'
+                # Issues4: '该公众号提供的服务出现故障，请稍后再试' --- xml格式写错了
                 mediaId = recMsg.MediaId
                 replyMsg = reply.ImageMsg(toUser, fromUser, mediaId)
+                return replyMsg.send()
+            if recMsg.MsgType == 'voice':
+                mediaId = recMsg.MediaId
+                replyMsg = reply.VoiceMsg(toUser, fromUser, mediaId)
                 return replyMsg.send()
             else:
                 return reply.Msg().send()
