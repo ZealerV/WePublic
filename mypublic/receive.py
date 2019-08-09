@@ -22,8 +22,6 @@ def parse_xml(webData):
         return TextMsg(xmlData)
     elif msg_type == 'image':
         return ImageMsg(xmlData)
-    else:
-        print('你传入的数据有问题')
 
 
 class Msg(object):
