@@ -24,6 +24,8 @@ def parse_xml(webData):
         return ImageMsg(xmlData)
     elif msg_type == 'voice':
         return VoiceMsg(xmlData)
+    elif msg_type == 'video':
+        return VideoMsg(xmlData)
 
 
 class Msg(object):
@@ -53,3 +55,10 @@ class VoiceMsg(Msg):
         Msg.__init__(self, xmlData)
         self.MediaId = xmlData.find('MediaId').text
         self.Format = xmlData.find('Format').text
+
+
+class VideoMsg(Msg):
+    def __int__(self, xmlData):
+        Msg.__init__(self, xmlData)
+        self.MediaId = xmlData.find('MediaId').text
+        self.ThumbMediaId = xmlData.find('ThumbMediaId').text

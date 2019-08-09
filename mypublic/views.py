@@ -70,6 +70,10 @@ def autoreply(request):
                 mediaId = recMsg.MediaId
                 replyMsg = reply.VoiceMsg(toUser, fromUser, mediaId)
                 return replyMsg.send()
+            if recMsg.MsgType == 'video':
+                mediaId = recMsg.MediaId
+                replyMsg = reply.VoiceMsg(toUser, fromUser, mediaId)
+                return replyMsg.send()
             else:
                 return reply.Msg().send()
         else:
