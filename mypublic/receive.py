@@ -11,6 +11,7 @@
 """
 import xml.etree.ElementTree as ET
 
+
 def parse_xml(webData):
     if len(webData) == 0:
         return None
@@ -26,6 +27,8 @@ def parse_xml(webData):
         return VoiceMsg(xmlData)
     elif msg_type == 'video':
         return VideoMsg(xmlData)
+    elif msg_type == 'shortvideo':
+        return ShortVideoMsg(xmlData)
 
 
 class Msg(object):
@@ -58,6 +61,13 @@ class VoiceMsg(Msg):
 
 
 class VideoMsg(Msg):
+    def __int__(self, xmlData):
+        Msg.__init__(self, xmlData)
+        self.MediaId = xmlData.find('MediaId').text
+        self.ThumbMediaId = xmlData.find('ThumbMediaId').text
+
+
+class ShortVideoMsg(Msg):
     def __int__(self, xmlData):
         Msg.__init__(self, xmlData)
         self.MediaId = xmlData.find('MediaId').text
