@@ -27,6 +27,8 @@ chmod a+x natapp
 # 4.提交公众平台开发配置
 略
 
+指定django项目运行ip端口为127.0.0.1:natapp配置端口
+
 代码验证路径***/wx/，记得配/wx/
 
 
