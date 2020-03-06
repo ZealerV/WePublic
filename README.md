@@ -22,8 +22,7 @@ chmod a+x natapp
 
 ./natapp-authtoken=上一步申请的token
 
-# 3.安装Django
-pip install安装即可
+# 3.安装django、werobot、django-werobot、nginx
 
 # 4.提交公众平台开发配置
 略
